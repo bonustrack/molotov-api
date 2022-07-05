@@ -12,7 +12,7 @@
     "@ethersproject/hash": "^5.6.1",
     "@ethersproject/wallet": "^5.6.2",
     "bluebird": "^3.7.2",
-    "connection-string": "1.0.1",
+    "connection-string": "4.3.5",
     "cors": "^2.8.5",
     "cross-fetch": "^3.1.5",
     "dotenv": "^16.0.1",
