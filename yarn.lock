@@ -1644,10 +1644,10 @@ configstore@^5.0.1:
     write-file-atomic "^3.0.0"
     xdg-basedir "^4.0.0"
 
-connection-string@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/connection-string/-/connection-string-1.0.1.tgz#05349acb41fe7178402014e4a10fd57b670f21f4"
-  integrity sha512-nymzuk1AQ+ipj8FOqtSvsQSaRcEIBwHXDq1/HczGzIgREqXGIU7owE/P2LeFIttMq+j5U3a4uMpH3ZI/1UPY7Q==
+connection-string@4.3.5:
+  version "4.3.5"
+  resolved "https://registry.yarnpkg.com/connection-string/-/connection-string-4.3.5.tgz#02f725bc3f67a1f764c5fe5d8b986959ca3d9de5"
+  integrity sha512-ayXcReF4FoYTUCKxN8Z4bXDKek6O2w5/udkXH42Sv17k9saPW9XkMUJc4nE2CgQRRvBTqkmVsQstXYb9f99j4w==
 
 content-disposition@0.5.4:
   version "0.5.4"
