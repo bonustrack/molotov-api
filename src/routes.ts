@@ -3,10 +3,39 @@ import { sendErrorResponse, sendResponse, getHash, verify } from './utils';
 
 const routes = {};
 
+async function isValid(envelop) {
+  try {
+    if (envelop.address !== envelop.data.message.from) {
+      const query = 'SELECT * FROM aliases WHERE account = ? and alias = ?';
+      const params = [envelop.data.message.from, envelop.address];
+      const [alias] = await db.queryAsync(query, params);
+      if (!alias) return false;
+    }
+    return await verify(envelop.address, envelop.sig, envelop.data);
+  } catch (e) {
+    return false;
+  }
+}
+
+routes['alias'] = async (params, tag, ws) => {
+  try {
+    if (!(await isValid(params))) sendErrorResponse(ws, tag, 'wrong signature');
+    const alias = {
+      account: params.data.message.from,
+      alias: params.data.message.alias,
+      created: params.data.message.created
+    };
+    await db.queryAsync('INSERT INTO aliases SET ?', [alias]);
+    return sendResponse(ws, tag, { success: true });
+  } catch (e) {
+    console.log('failed', e);
+    return sendErrorResponse(ws, tag, 'failed');
+  }
+};
+
 routes['discuss'] = async (params, tag, ws) => {
   try {
-    if (!(await verify(params.address, params.sig, params.data)))
-      sendErrorResponse(ws, tag, 'wrong signature');
+    if (!(await isValid(params))) sendErrorResponse(ws, tag, 'wrong signature');
     const id = getHash(params.data);
     const discussion = {
       id,
@@ -26,8 +55,7 @@ routes['discuss'] = async (params, tag, ws) => {
 
 routes['propose'] = async (params, tag, ws) => {
   try {
-    if (!(await verify(params.address, params.sig, params.data)))
-      sendErrorResponse(ws, tag, 'wrong signature');
+    if (!(await isValid(params))) sendErrorResponse(ws, tag, 'wrong signature');
     const id = getHash(params.data);
     const proposal = {
       id,
@@ -51,8 +79,7 @@ routes['propose'] = async (params, tag, ws) => {
 
 routes['vote'] = async (params, tag, ws) => {
   try {
-    if (!(await verify(params.address, params.sig, params.data)))
-      sendErrorResponse(ws, tag, 'wrong signature');
+    if (!(await isValid(params))) sendErrorResponse(ws, tag, 'wrong signature');
     const choice = params.data.message.choice;
     if (![1, 2, 3].includes(choice)) return sendErrorResponse(ws, tag, 'failed');
     const discussion = params.data.message.discussion;
