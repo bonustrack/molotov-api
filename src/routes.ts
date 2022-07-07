@@ -138,4 +138,8 @@ routes['get_voters'] = async (params, tag, ws) => {
   return sendResponse(ws, tag, voters);
 };
 
+routes['heartbeat'] = async (params, tag, ws) => {
+  return sendResponse(ws, tag, Math.round(Date.now() / 1e3));
+};
+
 export default routes;
